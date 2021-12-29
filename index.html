@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="GBK">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+    <style>
+        .main{
+            margin: 0 auto;
+            width: 1200px;
+            height: 800px;
+        }
+        #control{
+            width: 100%;
+            text-align: center;
+        }
+        #map { 
+            margin:16px auto;
+            width: 100%;
+            height: 100%; 
+        }
+        .leaflet-tile-container img { /* 修复高DPI显示器下瓦片之间出现白线的显示问题 */
+            width: 256.5px !important;
+            height: 256.5px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div id="control">
+            <button onclick="window.open('https://leafletjs.com/reference.html');">地图文档</button>
+            <button onclick="switchToNormal()">切换为标准样式</button>
+            <button onclick="switchToNight()">切换为夜间样式</button>
+            <button onclick="addCircle()">增加一个圆形区域</button>
+            <button onclick="addPolygon()">增加一个自定义区域</button>
+            <button onclick="addPopup()">增加卡片</button>
+            <button onclick="addCustomMarker()">增加自定义图标</button>
+        </div>
+        <div id="map"></div>
+    </div>
+    
+<script src="js/leaflet/leaflet.js"></script>
+<script src="js/proj4-compressed.js"></script>
+<script src="js/proj4leaflet.js"></script>
+<script>
+    function switchToNormal(){
+        tileLayer.options.id = "baidu";
+        tileLayer.redraw();
+    }
+    function switchToNight(){
+        tileLayer.options.id = "baidu_blue";
+        tileLayer.redraw();
+    }
+    //圆形
+    function addCircle(){
+        var circle = L.circle([29.608330404101636, 103.72779212081807], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(map);
+        return circle;
+    }
+    //自定义图形
+    function addPolygon(){
+        var polygon = L.polygon([
+            [29.60347378485335, 103.7227136368105],
+            [29.602374732554935, 103.72567768607324],
+            [29.59926591911351, 103.7232705187932],
+            [29.60028649985534, 103.72107891873225]
+        ]).addTo(map);
+        return polygon;
+    }
+    //增加展示信息
+    function addPopup(){
+        var popup = L.popup()
+                    .setLatLng(center)
+                    .setContent('<p>Hello world!<br />这是一个信息展示卡片。</p>')
+                    .openOn(map);
+        return popup;
+    }
+    //点击地图添加标识
+    function addMarker(e) {
+        console.log("You clicked the map:",e.latlng)
+        //增加标识
+        var marker = new L.marker([e.latlng.lat, e.latlng.lng],{
+            draggable:true, //可拖动
+        }).addTo(map);
+        marker.on('click',function(e){ //点击事件
+            console.log("You clicked the marker:",e.latlng,e)
+        });
+        marker.on('move',function(e){ //拖动事件
+            console.log("You drag the marker:",e.latlng,e);
+        });
+    }
+    //添加自定义标识
+    function addCustomMarker(){
+        var icon = L.icon({
+            iconUrl: 'images/man.png',
+
+            iconSize:     [40, 40], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [0, 0],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        L.marker(center, {icon: icon}).addTo(map);
+
+    }
+    //删除所有标识
+    function removeAllMarker(){
+        console.log("removeAllMarker");
+    }
+</script>
+<script>
+    //中心坐标
+    var center = {
+            lng: 103.719593,
+            lat: 29.607422
+        };
+    
+
+    // 百度坐标转换
+    var crs = new L.Proj.CRS(
+        'EPSG:3395',
+        '+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+        {
+            resolutions: function () {
+                level = 19
+                var res = [];
+                res[0] = Math.pow(2, 18);
+                for (var i = 1; i < level; i++) {
+                    res[i] = Math.pow(2, (18 - i))
+                }
+                return res;
+            }(),
+            origin: [0, 0],
+            bounds: L.bounds([20037508.342789244, 0], [0, 20037508.342789244])
+        }),
+        map = L.map('map', {
+            crs: crs
+        }
+    );
+
+    //限制区域
+    var corner1 = L.latLng(29.631126666749996, 103.66661576890446),
+    corner2 = L.latLng(29.53261775566647, 103.80327755414262),
+    bounds = L.latLngBounds(corner1, corner2);
+    map.setMaxBounds(bounds);
+
+    //设置瓦片路径
+    var tileLayer = L.tileLayer('tiles/{id}/{z}/{x}/{y}.png', {
+        attribution: 'Version ' + L.version + ' | Map data &copy; 2021 百度地图',
+        maxZoom: 19,
+        minZoom: 15,
+        subdomains: [0,1,2],
+        tms: true,
+        id: 'baidu',
+    }).addTo(map);
+
+   
+    //设置地图初始位置和缩放级别
+    map.setView([center.lat, center.lng], 18);
+
+    //监听地图点击事件
+    map.on('click', addMarker);
+
+    
+
+    
+    
+</script>
+</body>
+</html>
