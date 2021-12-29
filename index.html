@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="GBK">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -21,22 +21,18 @@
             width: 100%;
             height: 100%; 
         }
-        .leaflet-tile-container img { /* ĞŞ¸´¸ßDPIÏÔÊ¾Æ÷ÏÂÍßÆ¬Ö®¼ä³öÏÖ°×ÏßµÄÏÔÊ¾ÎÊÌâ */
-            width: 256.5px !important;
-            height: 256.5px !important;
-        }
     </style>
 </head>
 <body>
     <div class="main">
         <div id="control">
-            <button onclick="window.open('https://leafletjs.com/reference.html');">µØÍ¼ÎÄµµ</button>
-            <button onclick="switchToNormal()">ÇĞ»»Îª±ê×¼ÑùÊ½</button>
-            <button onclick="switchToNight()">ÇĞ»»ÎªÒ¹¼äÑùÊ½</button>
-            <button onclick="addCircle()">Ôö¼ÓÒ»¸öÔ²ĞÎÇøÓò</button>
-            <button onclick="addPolygon()">Ôö¼ÓÒ»¸ö×Ô¶¨ÒåÇøÓò</button>
-            <button onclick="addPopup()">Ôö¼Ó¿¨Æ¬</button>
-            <button onclick="addCustomMarker()">Ôö¼Ó×Ô¶¨ÒåÍ¼±ê</button>
+            <button onclick="window.open('https://leafletjs.com/reference.html');">åœ°å›¾æ–‡æ¡£</button>
+            <button onclick="switchToNormal()">åˆ‡æ¢ä¸ºæ ‡å‡†æ ·å¼</button>
+            <button onclick="switchToNight()">åˆ‡æ¢ä¸ºå¤œé—´æ ·å¼</button>
+            <button onclick="addCircle()">å¢åŠ ä¸€ä¸ªåœ†å½¢åŒºåŸŸ</button>
+            <button onclick="addPolygon()">å¢åŠ ä¸€ä¸ªè‡ªå®šä¹‰åŒºåŸŸ</button>
+            <button onclick="addPopup()">å¢åŠ å¡ç‰‡</button>
+            <button onclick="addCustomMarker()">å¢åŠ è‡ªå®šä¹‰å›¾æ ‡</button>
         </div>
         <div id="map"></div>
     </div>
@@ -53,7 +49,7 @@
         tileLayer.options.id = "baidu_blue";
         tileLayer.redraw();
     }
-    //Ô²ĞÎ
+    //åœ†å½¢
     function addCircle(){
         var circle = L.circle([29.608330404101636, 103.72779212081807], {
             color: 'red',
@@ -63,7 +59,7 @@
         }).addTo(map);
         return circle;
     }
-    //×Ô¶¨ÒåÍ¼ĞÎ
+    //è‡ªå®šä¹‰å›¾å½¢
     function addPolygon(){
         var polygon = L.polygon([
             [29.60347378485335, 103.7227136368105],
@@ -73,29 +69,29 @@
         ]).addTo(map);
         return polygon;
     }
-    //Ôö¼ÓÕ¹Ê¾ĞÅÏ¢
+    //å¢åŠ å±•ç¤ºä¿¡æ¯
     function addPopup(){
         var popup = L.popup()
                     .setLatLng(center)
-                    .setContent('<p>Hello world!<br />ÕâÊÇÒ»¸öĞÅÏ¢Õ¹Ê¾¿¨Æ¬¡£</p>')
+                    .setContent('<p>Hello world!<br />è¿™æ˜¯ä¸€ä¸ªä¿¡æ¯å±•ç¤ºå¡ç‰‡ã€‚</p>')
                     .openOn(map);
         return popup;
     }
-    //µã»÷µØÍ¼Ìí¼Ó±êÊ¶
+    //ç‚¹å‡»åœ°å›¾æ·»åŠ æ ‡è¯†
     function addMarker(e) {
         console.log("You clicked the map:",e.latlng)
-        //Ôö¼Ó±êÊ¶
+        //å¢åŠ æ ‡è¯†
         var marker = new L.marker([e.latlng.lat, e.latlng.lng],{
-            draggable:true, //¿ÉÍÏ¶¯
+            draggable:true, //å¯æ‹–åŠ¨
         }).addTo(map);
-        marker.on('click',function(e){ //µã»÷ÊÂ¼ş
+        marker.on('click',function(e){ //ç‚¹å‡»äº‹ä»¶
             console.log("You clicked the marker:",e.latlng,e)
         });
-        marker.on('move',function(e){ //ÍÏ¶¯ÊÂ¼ş
+        marker.on('move',function(e){ //æ‹–åŠ¨äº‹ä»¶
             console.log("You drag the marker:",e.latlng,e);
         });
     }
-    //Ìí¼Ó×Ô¶¨Òå±êÊ¶
+    //æ·»åŠ è‡ªå®šä¹‰æ ‡è¯†
     function addCustomMarker(){
         var icon = L.icon({
             iconUrl: 'images/man.png',
@@ -109,26 +105,26 @@
         L.marker(center, {icon: icon}).addTo(map);
 
     }
-    //É¾³ıËùÓĞ±êÊ¶
+    //åˆ é™¤æ‰€æœ‰æ ‡è¯†
     function removeAllMarker(){
         console.log("removeAllMarker");
     }
 </script>
 <script>
-    //ÖĞĞÄ×ø±ê
+    //ä¸­å¿ƒåæ ‡
     var center = {
             lng: 103.719593,
             lat: 29.607422
         };
     
 
-    // °Ù¶È×ø±ê×ª»»
+    // ç™¾åº¦åæ ‡è½¬æ¢
     var crs = new L.Proj.CRS(
         'EPSG:3395',
         '+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
         {
             resolutions: function () {
-                level = 19
+                var level = 20;
                 var res = [];
                 res[0] = Math.pow(2, 18);
                 for (var i = 1; i < level; i++) {
@@ -144,15 +140,15 @@
         }
     );
 
-    //ÏŞÖÆÇøÓò
+    //é™åˆ¶åŒºåŸŸ
     var corner1 = L.latLng(29.631126666749996, 103.66661576890446),
     corner2 = L.latLng(29.53261775566647, 103.80327755414262),
     bounds = L.latLngBounds(corner1, corner2);
     map.setMaxBounds(bounds);
 
-    //ÉèÖÃÍßÆ¬Â·¾¶
+    //è®¾ç½®ç“¦ç‰‡è·¯å¾„
     var tileLayer = L.tileLayer('tiles/{id}/{z}/{x}/{y}.png', {
-        attribution: 'Version ' + L.version + ' | Map data &copy; 2021 °Ù¶ÈµØÍ¼',
+        attribution: 'Version ' + L.version + ' | Map data &copy; 2021 ç™¾åº¦åœ°å›¾',
         maxZoom: 19,
         minZoom: 15,
         subdomains: [0,1,2],
@@ -161,16 +157,11 @@
     }).addTo(map);
 
    
-    //ÉèÖÃµØÍ¼³õÊ¼Î»ÖÃºÍËõ·Å¼¶±ğ
+    //è®¾ç½®åœ°å›¾åˆå§‹ä½ç½®å’Œç¼©æ”¾çº§åˆ«
     map.setView([center.lat, center.lng], 18);
 
-    //¼àÌıµØÍ¼µã»÷ÊÂ¼ş
+    //ç›‘å¬åœ°å›¾ç‚¹å‡»äº‹ä»¶
     map.on('click', addMarker);
-
-    
-
-    
-    
 </script>
 </body>
 </html>
